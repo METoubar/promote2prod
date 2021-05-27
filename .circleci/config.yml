@@ -62,7 +62,13 @@ jobs:
 workflows:
   my_workflow:
     jobs:
-      - configure_infrastructure
-      - smoke_test:
+      - create_and_deploy_front_end
+      - get_last_deployment_id:
           requires:
-            - configure_infrastructure
+            - create_and_deploy_front_end
+      - promote_to_production:
+          requires:
+            - get_last_deployment_id
+      - clean_up_old_front_end:
+          requires:
+            - promote_to_production
